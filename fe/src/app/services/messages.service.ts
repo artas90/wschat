@@ -6,10 +6,10 @@ import { Socket } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material';
 
-export interface IUserMessage {
-  text: any;
-  from: any; 
-  created: any;
+export interface UserMessage {
+  text: string;
+  from: string; 
+  created: string;
 }
 
 const MESSAGES = {
@@ -19,7 +19,7 @@ const MESSAGES = {
 
 @Injectable()
 export class MessagesService {
-  list$: Observable<IUserMessage[]> = this.socket.fromEvent("message").pipe(
+  list$: Observable<UserMessage[]> = this.socket.fromEvent("message").pipe(
     scan((acc, val) => [...acc, val], []),
     startWith([]),
   );
@@ -46,7 +46,7 @@ export class MessagesService {
     this.socket.emit('set-nickname', nickname);
   }
 
-  private getCurrentNicknames() {
+  private getCurrentNicknames(): Observable<string[]> {
     return this.httpClient.get<string[]>(environment.SERVER_CONF.url + '/nicknames').pipe(startWith([]));
   }
 
@@ -55,13 +55,12 @@ export class MessagesService {
       const user = data.user || 'Anonymous';
       const msg = MESSAGES[data.event];
       if (msg) {
-        console.log(msg + user);
         this.matSnackBar.open(msg + user);
       }
     });
   }
 
-  private mapNicknames(messages: IUserMessage[]) {
+  private mapNicknames(messages: UserMessage[]) {
     const list = messages.map(m => m.from);
     return [...new Set(list)];
   }

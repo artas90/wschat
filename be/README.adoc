@@ -1,6 +1,7 @@
 ```
-got from https://github.com/nest-ionic-examples/01-simple-chat/tree/master/chat-api
+based on https://github.com/nest-ionic-examples/01-simple-chat/tree/master/chat-api
 ```
+
 
 == Nest Application
 
